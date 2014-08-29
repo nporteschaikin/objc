@@ -8,7 +8,7 @@ By default, Xcode chooses to instantiate Core Data's components in `AppDelegate`
 Here, Core Data is extracted into a [singleton](http://en.wikipedia.org/wiki/Singleton_pattern) class.  
 
 - Core Data's shared components (persistent store coordinator, managed object model, managed object context) are instantiated on first call.
-- This includes a few helper methods which simplify selecting and inserting entities.
+- This includes a bunch helper methods which simplify selecting and inserting objects.
 
 ### Usage
 

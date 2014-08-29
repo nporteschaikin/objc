@@ -1,78 +1,54 @@
-#import "CoreDataManager.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-NSString * const databaseName = @"Pluck";
+@interface CoreDataManager : NSObject
 
-static NSManagedObjectModel *managedObjectModel;
-static NSPersistentStoreCoordinator *persistentStoreCoordinator;
-static NSManagedObjectContext *managedObjectContext;
++ (NSManagedObjectContext *) managedObjectContext;
 
-@implementation CoreDataManager
++ (NSManagedObjectContext *) newManagedObjectContext;
 
-+ (NSManagedObjectModel *)managedObjectModel {
-    if (!managedObjectModel) {
-        NSURL *modelURL = [[NSBundle mainBundle] URLForResource:databaseName withExtension:@"momd"];
-        managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    }
-    return managedObjectModel;
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
+                              withContext:(NSManagedObjectContext *)context;
 
-+ (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    if (!persistentStoreCoordinator) {
-        persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-        NSURL *applicationDocumentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-        NSURL *storeURL = [applicationDocumentsDirectory URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.sqlite", databaseName]];
-        NSError *error = nil;
-        NSString *failureReason = @"There was an error creating or loading the application's saved data.";
-        if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            dict[NSLocalizedDescriptionKey] = @"Failed to initialize the application's saved data";
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason;
-            dict[NSUnderlyingErrorKey] = error;
-            error = [NSError errorWithDomain:@"YOUR_ERROR_DOMAIN" code:9999 userInfo:dict];
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }
-    return persistentStoreCoordinator;
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table;
 
-+ (NSManagedObjectContext *) managedObjectContext {
-    if (!managedObjectContext) {
-        managedObjectContext = [[NSManagedObjectContext alloc] init];
-        managedObjectContext.persistentStoreCoordinator = [self persistentStoreCoordinator];
-    }
-    return managedObjectContext;
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
+                       matchedByPredicate:(NSPredicate *)predicate
+                              withContext:(NSManagedObjectContext *)context;
 
-+ (NSError *)saveContext {
-    NSError *error = nil;
-    [[self managedObjectContext] save:&error];
-    return error;
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
+                       matchedByPredicate:(NSPredicate *)predicate;
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table {
-    return [[NSFetchRequest alloc] initWithEntityName:table];
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
+                      withSortDescriptors:(NSArray *)sortDescriptors
+                              withContext:(NSManagedObjectContext *)context;
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table matchedByPredicate:(NSPredicate *)predicate {
-    NSFetchRequest *request = [self fetchRequestFromTable:table];
-    request.predicate = predicate;
-    return request;
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
+                      withSortDescriptors:(NSArray *)sortDescriptors;
 
-+ (NSFetchRequest *)fetchRequestFromTable: (NSString *)table matchedByPredicate:(NSPredicate *)predicate andSortDescriptors:(NSArray *)sortDescriptors {
-    NSFetchRequest *request = [self fetchRequestFromTable:table matchedByPredicate:predicate];
-    request.sortDescriptors = sortDescriptors;
-    return request;
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
+                       matchedByPredicate:(NSPredicate *)predicate
+                       andSortDescriptors:(NSArray *)sortDescriptors
+                              withContext:(NSManagedObjectContext *)context;
 
-+ (id)insertNewObjectToTable:(NSString *)table withValues:(NSDictionary *)values {
-    NSManagedObject *entity = [NSEntityDescription insertNewObjectForEntityForName:table inManagedObjectContext:[self managedObjectContext]];
-    for (NSString *key in values.allKeys) {
-        [entity setValue:[values valueForKey:key] forKey:key];
-    }
-    [self saveContext];
-    return entity;
-}
++ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
+                       matchedByPredicate:(NSPredicate *)predicate
+                       andSortDescriptors:(NSArray *)sortDescriptors;
+
++ (NSManagedObject *)newObjectInTable:(NSString *)table
+                               withContext:(NSManagedObjectContext *)context;
+
++ (NSManagedObject *)newObjectInTable:(NSString *)table;
+
++ (NSManagedObject *)newObjectInTable:(NSString *)table
+                           withValues:(NSDictionary *)values
+                          withContext:(NSManagedObjectContext *)context;
+
++ (NSManagedObject *)newObjectInTable:(NSString *)table
+                           withValues:(NSDictionary *)values;
+
++ (NSError *) saveContext:(NSManagedObjectContext *)managedObjectContext;
+
++ (NSError *) saveContext;
 
 @end
