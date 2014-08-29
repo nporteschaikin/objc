@@ -22,3 +22,7 @@ In a Core Data application, separates the `UITableViewDataSource` part of your v
 
 5. Write a `configureCell:withObject` method.
 6. Profit.
+
+### Credit
+
+Issue 4 of [objc](http://www.objc.io/issue-4/full-core-data-application.html).
