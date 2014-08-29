@@ -1,3 +1,3 @@
 # objc
 
-Subject to change.
+Useful Objective-C classes. These will change frequently.
