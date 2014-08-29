@@ -1,6 +1,6 @@
 #import "CoreDataManager.h"
 
-NSString * const databaseName = @"databaseName";
+NSString * const databaseName = @"Pluck";
 
 static NSManagedObjectModel *managedObjectModel;
 static NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -21,76 +21,37 @@ static NSManagedObjectContext *managedObjectContext;
     return context;
 }
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                              withContext:(NSManagedObjectContext *)context {
-    return [self fetchRequestFromTable:table
-                    matchedByPredicate:nil
-                   withSortDescriptors:nil
-                           withContext:context];
-}
-
 + (NSFetchRequest *)fetchRequestFromTable:(NSString *)table {
     return [self fetchRequestFromTable:table
                     matchedByPredicate:nil
-                   withSortDescriptors:nil
-                           withContext:[self managedObjectContext]];
-}
-
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                       matchedByPredicate:(NSPredicate *)predicate
-                              withContext:(NSManagedObjectContext *)context {
-    return [self fetchRequestFromTable:table
-                    matchedByPredicate:predicate
-                   withSortDescriptors:nil
-                           withContext:context];
+                   withSortDescriptors:nil];
 }
 
 + (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
                        matchedByPredicate:(NSPredicate *)predicate {
     return [self fetchRequestFromTable:table
                     matchedByPredicate:predicate
-                   withSortDescriptors:nil
-                           withContext:[self managedObjectContext]];
+                   withSortDescriptors:nil];
 }
 
 + (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                      withSortDescriptors:(NSArray *)sortDescriptors
-                              withContext:(NSManagedObjectContext *)context {
+                      withSortDescriptors:(NSArray *)sortDescriptors {
     return [self fetchRequestFromTable:table
                     matchedByPredicate:nil
-                   withSortDescriptors:sortDescriptors
-                           withContext:context];
-}
-
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                       withSortDescriptors:(NSArray *)sortDescriptors {
-    return [self fetchRequestFromTable:table
-                    matchedByPredicate:nil
-                    withSortDescriptors:sortDescriptors
-                           withContext:[self managedObjectContext]];
+                   withSortDescriptors:sortDescriptors];
 }
 
 + (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
                        matchedByPredicate:(NSPredicate *)predicate
-                       withSortDescriptors:(NSArray *)sortDescriptors
-                              withContext:(NSManagedObjectContext *)context {
+                       withSortDescriptors:(NSArray *)sortDescriptors {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:table];
     request.predicate = predicate;
     request.sortDescriptors = sortDescriptors;
     return request;
 }
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                       matchedByPredicate:(NSPredicate *)predicate
-                       withSortDescriptors:(NSArray *)sortDescriptors {
-    return [self fetchRequestFromTable:table
-                    matchedByPredicate:predicate
-                    withSortDescriptors:sortDescriptors
-                           withContext:[self managedObjectContext]];
-}
-
 + (NSManagedObject *)newObjectInTable:(NSString *)table
-                               withContext:(NSManagedObjectContext *)context {
+                               inContext:(NSManagedObjectContext *)context {
     NSManagedObject *entity = [NSEntityDescription insertNewObjectForEntityForName:table
                                   inManagedObjectContext:context];
     return entity;
@@ -98,14 +59,14 @@ static NSManagedObjectContext *managedObjectContext;
 
 + (NSManagedObject *)newObjectInTable:(NSString *)table {
     return [self newObjectInTable:table
-                      withContext:[self managedObjectContext]];
+                      inContext:[self managedObjectContext]];
 }
 
 + (NSManagedObject *)newObjectInTable:(NSString *)table
                            withValues:(NSDictionary *)values
-                          withContext:(NSManagedObjectContext *)context {
+                          inContext:(NSManagedObjectContext *)context {
     NSManagedObject *entity = [self newObjectInTable:table
-                              withContext:context];
+                              inContext:context];
     for (NSString *key in values.allKeys) {
         [entity setValue:[values valueForKey:key]
                   forKey:key];
@@ -117,7 +78,7 @@ static NSManagedObjectContext *managedObjectContext;
                            withValues:(NSDictionary *)values {
     return [self newObjectInTable:table
                        withValues:values
-                      withContext:[self managedObjectContext]];
+                      inContext:[self managedObjectContext]];
 }
 
 + (NSError *) saveContext:(NSManagedObjectContext *)managedObjectContext {
