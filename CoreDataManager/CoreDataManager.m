@@ -1,3 +1,11 @@
+//
+//  CoreDataManager.m
+//  Pluck
+//
+//  Created by Noah Portes Chaikin on 8/28/14.
+//  Copyright (c) 2014 Pluck. All rights reserved.
+//
+
 #import "CoreDataManager.h"
 
 NSString * const databaseName = @"Pluck";
@@ -48,6 +56,25 @@ static NSManagedObjectContext *managedObjectContext;
     request.predicate = predicate;
     request.sortDescriptors = sortDescriptors;
     return request;
+}
+
++ (NSArray *)fetchFromTable:(NSString *)table
+         matchedByPredicate:(NSPredicate *)predicate
+        withSortDescriptors:(NSArray *)sortDescriptors
+                  inContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *request = [self fetchRequestFromTable:table
+                                       matchedByPredicate:predicate
+                                      withSortDescriptors:sortDescriptors];
+    return [managedObjectContext executeFetchRequest:request error:nil];
+}
+
++ (NSArray *)fetchFromTable:(NSString *)table
+         matchedByPredicate:(NSPredicate *)predicate
+        withSortDescriptors:(NSArray *)sortDescriptors {
+    return [self fetchFromTable:table
+             matchedByPredicate:predicate
+            withSortDescriptors:sortDescriptors
+                      inContext:[self managedObjectContext]];
 }
 
 + (NSManagedObject *)newObjectInTable:(NSString *)table
