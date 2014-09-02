@@ -10,6 +10,10 @@ Here, Core Data is extracted into a [singleton](http://en.wikipedia.org/wiki/Sin
 - Core Data's shared components (persistent store coordinator, managed object model, managed object context) are instantiated on first call.
 - This includes a bunch helper methods which simplify selecting and inserting objects.
 
+### NSManagedObject+Querying
+
+I also wrote a category for `NSManagedObject`.  In tandem with `CoreDataManager`, this adds methods for querying entities from their `NSManagedObject` equivalents.  Use at your discretion.
+
 ### Usage
 
 See [CoreDataManager.h](CoreDataManager.h).
