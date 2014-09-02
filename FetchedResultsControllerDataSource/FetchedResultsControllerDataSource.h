@@ -17,10 +17,8 @@
 
 @interface FetchedResultsControllerDataSource : NSObject <UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) NSFetchedResultsController* fetchedResultsController;
 @property (nonatomic, weak) id<FetchedResultsControllerDataSourceDelegate> delegate;
-@property (strong, nonatomic) NSString *reuseIdentifier;
 
-- (id)initWithTableView:(UITableView *)tableView;
+- (id)initWithTableView:(UITableView *)tableView fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController reuseIdentifier:(NSString *)reuseIdentifier;
 
 @end

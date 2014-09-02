@@ -10,13 +10,17 @@
 
 @interface FetchedResultsControllerDataSource ()
 @property (strong, nonatomic) UITableView *tableView;
+@property (nonatomic, strong) NSFetchedResultsController* fetchedResultsController;
+@property (strong, nonatomic) NSString *reuseIdentifier;
 @end
 
 @implementation FetchedResultsControllerDataSource
 
-- (id)initWithTableView:(UITableView *)tableView {
+- (id)initWithTableView:(UITableView *)tableView fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super init]) {
         self.tableView = tableView;
+        self.fetchedResultsController = fetchedResultsController;
+        self.reuseIdentifier = reuseIdentifier;
     }
     return self;
 }
@@ -28,6 +32,7 @@
 
 - (void)setFetchedResultsController:(NSFetchedResultsController *)fetchedResultsController {
     _fetchedResultsController = fetchedResultsController;
+    _fetchedResultsController.delegate = self;
     [_fetchedResultsController performFetch:NULL];
 }
 
@@ -45,6 +50,39 @@
     id cell = [tableView dequeueReusableCellWithIdentifier:self.reuseIdentifier];
     [self.delegate configureCell:cell withObject:object];
     return cell;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView beginUpdates];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView endUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller
+   didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath
+     forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath {
+    switch (type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeMove:
+            [self.tableView moveRowAtIndexPath:indexPath
+                                   toIndexPath:newIndexPath];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+            break;
+    }
 }
 
 @end
