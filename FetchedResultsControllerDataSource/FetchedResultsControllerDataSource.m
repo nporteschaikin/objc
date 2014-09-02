@@ -1,9 +1,15 @@
+//
+//  FetchedResultsControllerDataSource.m
+//  Here
+//
+//  Created by Noah Portes Chaikin on 9/1/14.
+//  Copyright (c) 2014 Noah Portes Chaikin. All rights reserved.
+//
+
 #import "FetchedResultsControllerDataSource.h"
 
 @interface FetchedResultsControllerDataSource ()
-
 @property (strong, nonatomic) UITableView *tableView;
-
 @end
 
 @implementation FetchedResultsControllerDataSource
@@ -25,7 +31,7 @@
     [_fetchedResultsController performFetch:NULL];
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.fetchedResultsController.sections.count;
 }
 

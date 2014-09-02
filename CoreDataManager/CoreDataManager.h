@@ -1,9 +1,9 @@
 //
 //  CoreDataManager.h
-//  Pluck
+//  Here
 //
-//  Created by Noah Portes Chaikin on 8/28/14.
-//  Copyright (c) 2014 Pluck. All rights reserved.
+//  Created by Noah Portes Chaikin on 9/1/14.
+//  Copyright (c) 2014 Noah Portes Chaikin. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -15,38 +15,44 @@
 
 + (NSManagedObjectContext *) newManagedObjectContext;
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table;
++ (NSFetchRequest *)fetchRequestFromEntityByName:(NSString *)table
+                                       batchSize:(NSInteger)batchSize;
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                       matchedByPredicate:(NSPredicate *)predicate;
++ (NSFetchRequest *)fetchRequestFromEntityByName:(NSString *)table
+                              matchedByPredicate:(NSPredicate *)predicate
+                                       batchSize:(NSInteger)batchSize;
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                      withSortDescriptors:(NSArray *)sortDescriptors;
++ (NSFetchRequest *)fetchRequestFromEntityByName:(NSString *)table
+                             withSortDescriptors:(NSArray *)sortDescriptors
+                                       batchSize:(NSInteger)batchSize;
 
-+ (NSFetchRequest *)fetchRequestFromTable:(NSString *)table
-                       matchedByPredicate:(NSPredicate *)predicate
-                       withSortDescriptors:(NSArray *)sortDescriptors;
++ (NSFetchRequest *)fetchRequestFromEntityByName:(NSString *)table
+                              matchedByPredicate:(NSPredicate *)predicate
+                             withSortDescriptors:(NSArray *)sortDescriptors
+                                       batchSize:(NSInteger)batchSize;
 
-+ (NSArray *)fetchFromTable:(NSString *)table
-         matchedByPredicate:(NSPredicate *)predicate
-        withSortDescriptors:(NSArray *)sortDescriptors
-                  inContext:(NSManagedObjectContext *)context;
++ (NSArray *)fetchFromEntityByName:(NSString *)table
+                matchedByPredicate:(NSPredicate *)predicate
+               withSortDescriptors:(NSArray *)sortDescriptors
+                         inContext:(NSManagedObjectContext *)context
+                         batchSize:(NSInteger)batchSize;
 
-+ (NSArray *)fetchFromTable:(NSString *)table
-         matchedByPredicate:(NSPredicate *)predicate
-        withSortDescriptors:(NSArray *)sortDescriptors;
++ (NSArray *)fetchFromEntityByName:(NSString *)table
+                matchedByPredicate:(NSPredicate *)predicate
+               withSortDescriptors:(NSArray *)sortDescriptors
+                         batchSize:(NSInteger)batchSize;
 
-+ (NSManagedObject *)newObjectInTable:(NSString *)table
-                               inContext:(NSManagedObjectContext *)context;
++ (NSManagedObject *)newObjectInEntityByName:(NSString *)table
+                                   inContext:(NSManagedObjectContext *)context;
 
-+ (NSManagedObject *)newObjectInTable:(NSString *)table;
++ (NSManagedObject *)newObjectInEntityByName:(NSString *)table;
 
-+ (NSManagedObject *)newObjectInTable:(NSString *)table
-                           withValues:(NSDictionary *)values
-                          inContext:(NSManagedObjectContext *)context;
++ (NSManagedObject *)newObjectInEntityByName:(NSString *)table
+                                  withValues:(NSDictionary *)values
+                                   inContext:(NSManagedObjectContext *)context;
 
-+ (NSManagedObject *)newObjectInTable:(NSString *)table
-                           withValues:(NSDictionary *)values;
++ (NSManagedObject *)newObjectInEntityByName:(NSString *)table
+                                  withValues:(NSDictionary *)values;
 
 + (NSError *) saveContext:(NSManagedObjectContext *)context;
 

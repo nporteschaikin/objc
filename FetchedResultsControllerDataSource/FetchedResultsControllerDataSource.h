@@ -1,3 +1,11 @@
+//
+//  FetchedResultsControllerDataSource.h
+//  Here
+//
+//  Created by Noah Portes Chaikin on 9/1/14.
+//  Copyright (c) 2014 Noah Portes Chaikin. All rights reserved.
+//
+
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
