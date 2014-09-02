@@ -1,6 +1,6 @@
 # FetchedResultsControllerDataSource
 
-In a Core Data application, this separates the `UITableViewDataSource` part of your view controller into its own class and handles populating a table view with Core Data records.
+In a Core Data application, this separates the `UITableViewDataSource` part of your view controller into its own class and handles populating and updating a table view with Core Data records.
 
 ### Usage
 
