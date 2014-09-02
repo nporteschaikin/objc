@@ -10,7 +10,7 @@
 
 @interface FetchedResultsControllerDataSource ()
 @property (strong, nonatomic) UITableView *tableView;
-@property (nonatomic, strong) NSFetchedResultsController* fetchedResultsController;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSString *reuseIdentifier;
 @end
 
