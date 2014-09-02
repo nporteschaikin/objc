@@ -12,7 +12,7 @@ Here, Core Data is extracted into a [singleton](http://en.wikipedia.org/wiki/Sin
 
 ### NSManagedObject+Querying
 
-I also wrote a category for `NSManagedObject`.  In tandem with `CoreDataManager`, this adds methods for querying entities from their `NSManagedObject` equivalents.  Use at your discretion.
+I also wrote a category for `NSManagedObject`.  In tandem with `CoreDataManager`, this adds methods for querying entities from their `NSManagedObject` equivalents.  It's an incomplete implementation of the [active record pattern](http://en.wikipedia.org/wiki/Active_record_pattern).  If this is your schtick, I'd forgo this entirely and use [ObjectiveRecord](https://github.com/supermarin/ObjectiveRecord).  
 
 ### Usage
 
