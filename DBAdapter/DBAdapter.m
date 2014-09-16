@@ -99,6 +99,7 @@ static NSString * const databaseFile = @"flyer.sqlite3";
             }
             [rows addObject:row];
         }
+        sqlite3_finalize(statement);
         return rows;
     }
     return nil;
