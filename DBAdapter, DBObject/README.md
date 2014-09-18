@@ -1,4 +1,4 @@
-# DBAdapter
+# DBAdapter, DBObject
 
 SQLite adapter and [active record](http://en.wikipedia.org/wiki/Active_record_pattern) implementation.
 
