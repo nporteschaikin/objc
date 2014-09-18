@@ -7,7 +7,3 @@ Create and query an SQLite database. `DBObject` is to be inherited and follows t
 - [ ] updating
 - [ ] migrations
 - [ ] validations
-- [ ] refactor DBAdapter
-  - [ ] zero-configuration?
-  - [ ] cleaner code
-- [ ] turn into framework
