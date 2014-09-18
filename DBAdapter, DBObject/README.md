@@ -1,9 +1,18 @@
 # DBAdapter
 
-Create and query an SQLite database. `DBObject` is to be inherited and follows the [active record pattern](http://en.wikipedia.org/wiki/Active_record_pattern).  
+SQLite adapter and [active record](http://en.wikipedia.org/wiki/Active_record_pattern) implementation.
 
 - [x] fetching
 - [x] creating
 - [ ] updating
 - [ ] migrations
 - [ ] validations
+- [ ] inflect default `[[DBObject class] tableName]`
+- [ ] refactor DBAdapter
+  - [ ] zero-configuration?
+  - [ ] cleaner code
+- [ ] turn into framework
+
+### License
+
+MIT
