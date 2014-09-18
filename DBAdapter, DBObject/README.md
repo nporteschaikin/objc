@@ -9,7 +9,7 @@ SQLite adapter and [active record](http://en.wikipedia.org/wiki/Active_record_pa
 - [ ] validations
 - [ ] inflect default `[[DBObject class] tableName]`
 - [ ] refactor DBAdapter
-  - [ ] zero-configuration?
+  - [ ] zero-configuration database creation (?)
   - [ ] cleaner code
 - [ ] error handling
 - [ ] tests
