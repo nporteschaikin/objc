@@ -11,6 +11,8 @@ SQLite adapter and [active record](http://en.wikipedia.org/wiki/Active_record_pa
 - [ ] refactor DBAdapter
   - [ ] zero-configuration?
   - [ ] cleaner code
+- [ ] error handling
+- [ ] tests
 - [ ] turn into framework
 
 ### License
