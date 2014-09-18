@@ -10,9 +10,7 @@
 
 @interface DBObjectFetcher : NSObject
 
-@property (nonatomic) Class DBObject;
-
-- (id)initWithDBObject:(Class)DBObject;
+- (id)initWithDBObjectClass:(Class)DBObjectClass;
 - (NSArray *)fetch;
 
 - (void)setColumns:(id)arguments, ... NS_REQUIRES_NIL_TERMINATION;

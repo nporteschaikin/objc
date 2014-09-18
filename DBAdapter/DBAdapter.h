@@ -13,6 +13,7 @@
 
 + (DBAdapter *)dbAdapter;
 - (BOOL)executeQuery:(NSString *)queryString;
-- (NSArray *)rowsWithQuery:(NSString *)queryString;
+- (NSArray *)recordsByQuery:(NSString *)queryString;
+- (NSNumber *)lastInsertRowId;
 
 @end

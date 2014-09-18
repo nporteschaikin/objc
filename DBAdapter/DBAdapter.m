@@ -11,18 +11,18 @@
 static NSString * const databaseFile = @"flyer.sqlite3";
 
 @interface DBAdapter () {
-    sqlite3 *database;
+    sqlite3 *_database;
 }
 @end
 
 @implementation DBAdapter
 
 + (DBAdapter *)dbAdapter {
-    static DBAdapter *dbAdapter;
-    if (!dbAdapter) {
-        dbAdapter = [[self alloc] init];
+    static DBAdapter *_dbAdapter;
+    if (!_dbAdapter) {
+        _dbAdapter = [[self alloc] init];
     }
-    return dbAdapter;
+    return _dbAdapter;
 }
 
 - (id)init {
@@ -36,23 +36,23 @@ static NSString * const databaseFile = @"flyer.sqlite3";
                                  contents:nil
                                attributes:nil];
         }
-        sqlite3_open([databasePath UTF8String], &database);
+        sqlite3_open([databasePath UTF8String], &_database);
     }
     return self;
 }
 
 - (BOOL)executeQuery:(NSString *)queryString {
     char *error;
-    if (sqlite3_exec(database, [queryString UTF8String], NULL, NULL, &error) == SQLITE_OK) {
+    if (sqlite3_exec(_database, [queryString UTF8String], NULL, NULL, &error) == SQLITE_OK) {
         return YES;
     }
     return NO;
 }
 
-- (NSArray *)rowsWithQuery:(NSString *)queryString {
+- (NSArray *)recordsByQuery:(NSString *)queryString {
     sqlite3_stmt *statement;
     NSMutableArray *rows = [[NSMutableArray alloc] init];
-    if (sqlite3_prepare_v2(database, [queryString UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+    if (sqlite3_prepare_v2(_database, [queryString UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         int columns = sqlite3_column_count(statement);
         while (sqlite3_step(statement) == SQLITE_ROW) {
             NSMutableDictionary *row = [[NSMutableDictionary alloc] initWithCapacity:columns];
@@ -99,14 +99,17 @@ static NSString * const databaseFile = @"flyer.sqlite3";
             }
             [rows addObject:row];
         }
-        sqlite3_finalize(statement);
         return rows;
     }
     return nil;
 }
 
+- (NSNumber *)lastInsertRowId {
+    return [NSNumber numberWithLongLong:sqlite3_last_insert_rowid(_database)];
+}
+
 - (void)dealloc {
-    sqlite3_close(database);
+    sqlite3_close(_database);
 }
 
 @end

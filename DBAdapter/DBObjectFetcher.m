@@ -11,98 +11,99 @@
 #import "DBAdapter.h"
 
 @interface DBObjectFetcher () {
-    NSString *selectStatement;
-    NSString *fromStatement;
-    NSString *whereStatement;
-    NSNumber *limitNumber;
-    NSNumber *offsetNumber;
+    Class _DBObjectClass;
+    NSString * _selectStatement;
+    NSString * _fromStatement;
+    NSString * _whereStatement;
+    NSNumber * _limitNumber;
+    NSNumber * _offsetNumber;
 }
 
 @end
 
 @implementation DBObjectFetcher
 
-- (id)initWithDBObject:(Class)DBObject {
+- (id)initWithDBObjectClass:(Class)DBObjectClass {
     if (self = [super init]) {
-        if (![DBObject isSubclassOfClass:[DBObject class]]) {
-            return nil;
-        }
-        self.DBObject = DBObject;
+        _DBObjectClass = DBObjectClass;
     }
     return self;
 }
 
 - (NSString *)sqlQuery {
     NSMutableString *sqlQuery = [NSMutableString string];
-
+    
     [sqlQuery appendString:[self selectStatement]];
     [sqlQuery appendString:[self fromStatement]];
     [sqlQuery appendString:[self whereStatement]];
     [sqlQuery appendString:[self limitStatement]];
     [sqlQuery appendString:[self offsetStatement]];
-
+    
     return sqlQuery;
 }
 
 - (NSArray *)fetch {
     NSMutableArray *collection = [NSMutableArray array];
     DBObject *object;
-
+    
     NSArray *records = [[DBAdapter dbAdapter] recordsByQuery:[self sqlQuery]];
     for (NSDictionary *record in records) {
-        object = [[self.DBObject alloc] init];
+        object = [[_DBObjectClass alloc] init];
         for (NSString *key in record) {
+            DBColumn *column = [_DBObjectClass performSelector:@selector(columnNamed:)
+                                                    withObject:key];
             id value = [record valueForKey:key];
-            [object setValue:value forKey:key];
+            [(DBObject *)object setValue:value
+                               forColumn:column];
         }
         [collection addObject:object];
     }
-
+    
     return collection;
 }
 
 - (NSString *)selectStatement {
-    if (!selectStatement) {
-        selectStatement = @"*";
+    if (!_selectStatement) {
+        _selectStatement = @"*";
     }
-    return [NSString stringWithFormat:@"SELECT %@", selectStatement];
+    return [NSString stringWithFormat:@"SELECT %@", _selectStatement];
 }
 
 - (NSString *)fromStatement {
-    return [NSString stringWithFormat:@" FROM %@", [self.DBObject performSelector:@selector(tableName)]];
+    return [NSString stringWithFormat:@" FROM %@", [[_DBObjectClass class] performSelector:@selector(tableName)]];
 }
 
 - (NSString *)whereStatement {
     NSMutableString *statement = [NSMutableString string];
-    if (whereStatement) {
-        [statement appendFormat:@" WHERE %@", whereStatement];
+    if (_whereStatement) {
+        [statement appendFormat:@" WHERE %@", _whereStatement];
     }
     return statement;
 }
 
 - (NSString *)limitStatement {
     NSMutableString *statement = [NSMutableString string];
-    if (limitNumber) {
-        [statement appendFormat:@" LIMIT %@", limitNumber];
+    if (_limitNumber) {
+        [statement appendFormat:@" LIMIT %@", _limitNumber];
     }
     return statement;
 }
 
 - (NSString *)offsetStatement {
     NSMutableString *statement = [NSMutableString string];
-    if (offsetNumber) {
-        [statement appendFormat:@" OFFSET %@", offsetNumber];
+    if (_offsetNumber) {
+        [statement appendFormat:@" OFFSET %@", _offsetNumber];
     }
     return statement;
 }
 
 - (void)setWhere:(id)firstCondition, ... {
     NSMutableArray *sqlArguments = [NSMutableArray array];
-
+    
     va_list arguments;
     va_start(arguments, firstCondition);
     id condition = firstCondition;
-
+    
     while (condition) {
         if ([condition isKindOfClass:[NSDictionary class]]) {
             for (NSString *key in (NSDictionary *)condition) {
@@ -114,14 +115,14 @@
         }
         condition = va_arg(arguments, id);
     }
-
+    
     va_end(arguments);
-    whereStatement = [sqlArguments componentsJoinedByString:@" AND "];
+    _whereStatement = [sqlArguments componentsJoinedByString:@" AND "];
 }
 
 - (void)setColumns:(id)firstColumn, ... {
     NSMutableArray *sqlColumns = [NSMutableArray array];
-
+    
     va_list arguments;
     va_start(arguments, firstColumn);
     id column = firstColumn;
@@ -129,17 +130,17 @@
         [sqlColumns addObject:column];
         column = va_arg(arguments, id);
     }
-
+    
     va_end(arguments);
-    selectStatement = [sqlColumns componentsJoinedByString:@", "];
+    _selectStatement = [sqlColumns componentsJoinedByString:@", "];
 }
 
 - (void)setLimit:(NSNumber *)limit {
-    limitNumber = limit;
+    _limitNumber = limit;
 }
 
 - (void)setOffset:(NSNumber *)offset {
-    offsetNumber = offset;
+    _offsetNumber = offset;
 }
 
 @end

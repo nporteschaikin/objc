@@ -7,17 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DBColumn.h"
 #import "DBObjectFetcher.h"
-#import "DBAdapter.h"
 
 @interface DBObject : NSObject
 
+@property (strong, nonatomic, readonly) NSNumber *id;
+@property (strong, nonatomic, readonly) NSMutableSet *changedColumns;
+
 + (NSString *)tableName;
-+ (NSArray *)tableColumns;
++ (NSSet *)columns;
++ (DBColumn *)columnNamed:(NSString *)columnName;
++ (DBColumn *)columnWithSetterSelector:(SEL)setterSelector;
++ (DBColumn *)columnWithGetterSelector:(SEL)getterSelector;
 
 + (DBObjectFetcher *)objectFetcher;
 
-- (BOOL)save;
-- (BOOL)destroy;
+- (id)valueForColumn:(DBColumn *)column;
+- (void)setValue:(id)value forColumn:(DBColumn *)column;
+- (void)save;
 
 @end
