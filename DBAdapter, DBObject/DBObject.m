@@ -10,11 +10,13 @@
 #import "DBObject.h"
 #import "DBObjectAccessorHelper.h"
 #import "DBColumnFetcher.h"
-#import "DBObjectInsert.h"
+#import "DBObjectInserter.h"
+#import "DBObjectUpdater.h"
 
-@interface DBObject ()
+@interface DBObject () {
+    DBObjectUpdater *dbObjectUpdater;
+}
 
-@property (strong, nonatomic, readwrite) NSNumber *id;
 @property (strong, nonatomic, readwrite) NSMutableSet *changedColumns;
 
 @end
@@ -86,8 +88,20 @@
     return nil;
 }
 
++ (DBColumn *)primaryKeyColumn {
+    for (DBColumn *column in [self columns]) {
+        if (column.isPrimaryKey) {
+            return column;
+        }
+    }
+    return nil;
+}
+
 - (void)setValue:(id)value forColumn:(DBColumn *)column {
-    objc_setAssociatedObject(self, column.key, value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self,
+                             column.key,
+                             value,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     if (!self.changedColumns) {
         self.changedColumns = [NSMutableSet set];
     }
@@ -95,15 +109,20 @@
 }
 
 - (id)valueForColumn:(DBColumn *)column {
-    return objc_getAssociatedObject(self, column.key);
+    return objc_getAssociatedObject(self,
+                                    column.key);
 }
 
 - (void)save {
-    if (self.id) {
-        // update
+    if ([self valueForColumn:[[self class] primaryKeyColumn]]) {
+        if (!dbObjectUpdater) {
+            dbObjectUpdater = [[DBObjectUpdater alloc] initWithDBObject:self];
+        }
+        [dbObjectUpdater execute];
     } else {
-        DBObjectInsert *dbObjectInsert = [[DBObjectInsert alloc] initWithDBObject:self];
-        self.id = [dbObjectInsert execute];
+        DBObjectInserter *dbObjectInserter = [[DBObjectInserter alloc] initWithDBObject:self];
+        NSNumber *primaryKey = [dbObjectInserter execute];
+        [self setValue:primaryKey forColumn:[[self class] primaryKeyColumn]];
     }
 }
 

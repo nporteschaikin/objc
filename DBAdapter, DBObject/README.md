@@ -4,7 +4,7 @@ SQLite adapter and [active record](http://en.wikipedia.org/wiki/Active_record_pa
 
 - [x] fetching
 - [x] creating
-- [ ] updating
+- [x] updating
 - [ ] migrations
 - [ ] validations
 - [ ] inflect default `[[DBObject class] tableName]`

@@ -43,6 +43,7 @@ static NSString * const databaseFile = @"flyer.sqlite3";
 
 - (BOOL)executeQuery:(NSString *)queryString {
     char *error;
+    NSLog(@"%@", queryString);
     if (sqlite3_exec(_database, [queryString UTF8String], NULL, NULL, &error) == SQLITE_OK) {
         return YES;
     }
@@ -51,6 +52,7 @@ static NSString * const databaseFile = @"flyer.sqlite3";
 
 - (NSArray *)recordsByQuery:(NSString *)queryString {
     sqlite3_stmt *statement;
+    NSLog(@"%@", queryString);
     NSMutableArray *rows = [[NSMutableArray alloc] init];
     if (sqlite3_prepare_v2(_database, [queryString UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         int columns = sqlite3_column_count(statement);
@@ -67,8 +69,7 @@ static NSString * const databaseFile = @"flyer.sqlite3";
                                 forKey:name];
                         break;
                     }
-                    case SQLITE_FLOAT:
-                    {
+                    case SQLITE_FLOAT: {
                         float value = sqlite3_column_double(statement, x);
                         [row setObject:[NSNumber numberWithFloat:value]
                                 forKey:name];

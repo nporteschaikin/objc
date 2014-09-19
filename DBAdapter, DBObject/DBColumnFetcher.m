@@ -30,13 +30,14 @@
 
 - (NSMutableSet *)fetch {
     NSMutableSet *columns = [NSMutableSet set];
-    NSString *sqlQuery = [NSString stringWithFormat:@"PRAGMA table_info('%@')", [_DBObjectClass performSelector:@selector(tableName)]];
+    NSString *sqlQuery = [NSString stringWithFormat:@"PRAGMA table_info(%@)", [_DBObjectClass performSelector:@selector(tableName)]];
     
     NSArray *sqlColumns = [[DBAdapter dbAdapter] recordsByQuery:sqlQuery];
     for (NSDictionary *sqlColumn in sqlColumns) {
         DBColumn *column = [[DBColumn alloc] initWithDBObjectClass:_DBObjectClass
                                                           withName:sqlColumn[@"name"]
-                                                          withType:sqlColumn[@"type"]];
+                                                          withType:sqlColumn[@"type"]
+                                                      isPrimaryKey:[sqlColumn[@"pk"] boolValue]];
         [columns addObject:column];
         
     }

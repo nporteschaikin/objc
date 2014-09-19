@@ -16,6 +16,7 @@
 @property (strong, nonatomic, readwrite) Class DBObjectClass;
 @property (strong, nonatomic, readwrite) NSString *name;
 @property (strong, nonatomic, readwrite) NSString *type;
+@property (nonatomic, readwrite) BOOL isPrimaryKey;
 
 @end
 
@@ -23,11 +24,13 @@
 
 - (id)initWithDBObjectClass:(Class)DBObjectClass
                    withName:(NSString *)name
-                   withType:(NSString *)type {
+                   withType:(NSString *)type
+               isPrimaryKey:(BOOL)isPrimaryKey {
     if (self = [super init]) {
         self.DBObjectClass = DBObjectClass;
         self.name = name;
         self.type = type;
+        self.isPrimaryKey = isPrimaryKey;
     }
     return self;
 }

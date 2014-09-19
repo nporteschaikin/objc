@@ -12,7 +12,6 @@
 
 @interface DBObject : NSObject
 
-@property (strong, nonatomic, readonly) NSNumber *id;
 @property (strong, nonatomic, readonly) NSMutableSet *changedColumns;
 
 + (NSString *)tableName;
@@ -20,6 +19,7 @@
 + (DBColumn *)columnNamed:(NSString *)columnName;
 + (DBColumn *)columnWithSetterSelector:(SEL)setterSelector;
 + (DBColumn *)columnWithGetterSelector:(SEL)getterSelector;
++ (DBColumn *)primaryKeyColumn;
 
 + (DBObjectFetcher *)objectFetcher;
 

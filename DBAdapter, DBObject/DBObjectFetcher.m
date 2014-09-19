@@ -7,6 +7,7 @@
 //
 
 #import "DBObjectFetcher.h"
+#import <objc/runtime.h>
 #import "DBObject.h"
 #import "DBAdapter.h"
 
@@ -48,13 +49,15 @@
     
     NSArray *records = [[DBAdapter dbAdapter] recordsByQuery:[self sqlQuery]];
     for (NSDictionary *record in records) {
-        object = [[_DBObjectClass alloc] init];
+        object = (DBObject *)[[_DBObjectClass alloc] init];
         for (NSString *key in record) {
             DBColumn *column = [_DBObjectClass performSelector:@selector(columnNamed:)
                                                     withObject:key];
             id value = [record valueForKey:key];
-            [(DBObject *)object setValue:value
-                               forColumn:column];
+            objc_setAssociatedObject(object,
+                                     column.key,
+                                     value,
+                                     OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         }
         [collection addObject:object];
     }

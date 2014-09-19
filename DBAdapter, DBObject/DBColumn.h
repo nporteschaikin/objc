@@ -15,11 +15,13 @@
 @property (strong, nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) char *key;
 @property (strong, nonatomic, readonly) NSString *type;
+@property (nonatomic, readonly) BOOL isPrimaryKey;
 @property (nonatomic, readonly) SEL getterSelector;
 @property (nonatomic, readonly) SEL setterSelector;
 
 - (id)initWithDBObjectClass:(Class)DBObjectClass
                    withName:(NSString *)name
-                   withType:(NSString *)type;
+                   withType:(NSString *)type
+               isPrimaryKey:(BOOL)isPrimaryKey;
 
 @end
